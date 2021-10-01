@@ -6,6 +6,14 @@
  */
 const sumMultiples = arr => {
   if (arr === undefined) throw new Error("arr is required");
+  let isMultiples = 0;
+  arr.forEach(num => {
+    let xNumb = 0;
+    xNumb = num % 3 == 0 ? num : xNumb;
+    xNumb = num % 5 == 0 ? num : xNumb;
+    isMultiples += xNumb;
+  });
+  return isMultiples;
 };
 
 /**
@@ -15,6 +23,14 @@ const sumMultiples = arr => {
  */
 const isValidDNA = str => {
   if (str === undefined) throw new Error("str is required");
+  
+  let dna = ['C', 'G', 'T', 'A'];
+  dna.sort();
+
+  let nDna = str.toUpperCase().split('').sort();
+
+  let isValid = nDna.every((val, index) => val === dna[index]);
+  return isValid;
 };
 
 /**
@@ -24,6 +40,17 @@ const isValidDNA = str => {
  */
 const getComplementaryDNA = str => {
   if (str === undefined) throw new Error("str is required");
+  
+  let nDna = str.toUpperCase().split('');
+  let strNewDNA = '';
+
+  nDna.forEach(element => {
+    if (element === 'T') strNewDNA += 'A';
+    if (element === 'C') strNewDNA += 'G';
+    if (element === 'A') strNewDNA += 'T';
+    if (element === 'G') strNewDNA += 'C';
+  });
+  return strNewDNA;
 };
 
 /**
@@ -33,6 +60,14 @@ const getComplementaryDNA = str => {
  */
 const isItPrime = n => {
   if (n === undefined) throw new Error("n is required");
+  let isPrime = false;
+  for (let i = 2; i <= n; i++) {
+    if (n % i === 0) {
+      isPrime = true;
+      break;
+    }
+  }
+  return isPrime;
 };
 
 /**
@@ -49,6 +84,14 @@ const isItPrime = n => {
 const createMatrix = (n, fill) => {
   if (n === undefined) throw new Error("n is required");
   if (fill === undefined) throw new Error("fill is required");
+  let newArray = [];
+  for (let row = 0; row <= n - 1; row++) {
+    newArray[row] = [];
+    for (let col = 0; col <= n - 1; col++) {
+      newArray[row][col] = fill;
+    }
+  }
+  return newArray;
 };
 
 /**
@@ -66,6 +109,13 @@ const createMatrix = (n, fill) => {
 const areWeCovered = (staff, day) => {
   if (staff === undefined) throw new Error("staff is required");
   if (day === undefined) throw new Error("day is required");
+  let dayStaff = 0;
+  Object.keys(staff).forEach(pessoa => {
+    for (let i = 0; i < staff[pessoa].rota.length; i++) {
+      if (staff[pessoa].rota[i] === day) dayStaff++;
+    }
+  });
+  return dayStaff >= 3 ? true : false;
 };
 
 module.exports = {

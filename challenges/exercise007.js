@@ -4,6 +4,12 @@
  */
 const sumDigits = n => {
   if (n === undefined) throw new Error("n is required");
+  let sumDig = 0;
+  let nArray = n.toString().split('');
+  for (let i = 0; i < nArray.length; i++) {
+    sumDig += Number(nArray[i]);
+  }
+  return sumDig;
 };
 
 /**
@@ -14,9 +20,14 @@ const sumDigits = n => {
  * @param {Number} end
  * @param {Number} step
  */
-const createRange = (start, end, step) => {
+const createRange = (start, end, step=1) => {
   if (start === undefined) throw new Error("start is required");
   if (end === undefined) throw new Error("end is required");
+  let arrRange = [];
+  for (let i = start; i <= end; i += step) {
+    arrRange.push(i);
+  }
+  return arrRange;
 };
 
 /**
@@ -51,6 +62,26 @@ const createRange = (start, end, step) => {
 const getScreentimeAlertList = (users, date) => {
   if (users === undefined) throw new Error("users is required");
   if (date === undefined) throw new Error("date is required");
+  let arrUsers = [];
+  users.forEach(user => {
+    //get user 
+    let totalTime = 0;
+    let userName = user.username;
+    let screenTime = user.screenTime;
+    //Get date
+    screenTime.forEach(sc => {
+      let dt = sc.date;
+      let usage = sc.usage;
+      //get app and minutes
+      for (let app in usage) {
+        //let nameApp = app;
+        let timeApp = usage[app];
+        if (dt === date) totalTime += timeApp;
+      }
+      if (totalTime >= 100) arrUsers.push(userName);
+    })
+  })
+  return arrUsers;
 };
 
 /**
@@ -65,6 +96,13 @@ const getScreentimeAlertList = (users, date) => {
  */
 const hexToRGB = hexStr => {
   if (hexStr === undefined) throw new Error("hexStr is required");
+  let rgb = hexStr.replace('#', '').match(/.{1,2}/g);
+  let aRgb = [
+    parseInt(rgb[0], 16),
+    parseInt(rgb[1], 16),
+    parseInt(rgb[2], 16)
+  ];
+  return "RGB(" + aRgb[0] + "," + aRgb[1] + "," + aRgb[2] + ")";
 };
 
 /**
@@ -79,6 +117,33 @@ const hexToRGB = hexStr => {
  */
 const findWinner = board => {
   if (board === undefined) throw new Error("board is required");
+  //change: X=1, 0=-1 and null=0
+  //Sum rows and columns and diagonals
+  //a=[c1,c2,c3,r1,r2,r3,d1,d2]
+  let arrSumResult = [0, 0, 0, 0, 0, 0, 0, 0];
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      switch (board[row][col]) {
+        case 'X':
+          board[row][col] = 1;
+          break;
+        case '0':
+          board[row][col] = -1;
+          break;
+        default:
+          board[row][col] = 0;
+      }
+      arrSumResult[row + 3] += board[row][col];
+      arrSumResult[col] += board[row][col];
+    }
+  }
+  arrSumResult[6] = board[0][0] + board[1][1] + board[2][2];
+  arrSumResult[7] = board[0][2] + board[1][1] + board[2][0];
+  let winner = null;
+  if (arrSumResult.indexOf(3) != -1) winner = 'X';
+  if (arrSumResult.indexOf(-3) != -1) winner = '0';
+
+  return winner;
 };
 
 module.exports = {
